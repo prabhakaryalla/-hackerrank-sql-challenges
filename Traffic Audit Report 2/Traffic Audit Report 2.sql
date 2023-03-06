@@ -8,12 +8,10 @@ select
        IIF(ratio > 26 ,Concat(Replicate('Z', ratio/26),char(64 + ratio%26)), char(64 + ratio)) as ratio_class,
 	   ratio,
 	   mac = 
-       STUFF((SELECT ', ' + mac
+       STUFF((SELECT ',' + mac
            FROM @TEMPTABLE b 
            WHERE b.ratio = a.ratio
-		   order by b.ratio, mac
-          FOR XML PATH('')), 1, 2, '')
+		   order by b.ratio, mac asc
+          FOR XML PATH('')), 1, 1, '')
 from @TEMPTABLE a
 group by ratio;
-
- 
